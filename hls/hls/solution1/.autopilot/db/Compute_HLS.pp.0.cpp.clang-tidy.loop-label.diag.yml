@@ -1,0 +1,49 @@
+---
+MainSourceFile:  /home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp
+Diagnostics:     
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_45_1:  '
+    FileOffset:      45
+    FilePath:        /home/Jake/Desktop/cpre563/base/src/layers/Compute_HLS.cpp
+    Replacements:    
+      - FilePath:        /home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp
+        Offset:          874982
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_45_1: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_49_2:  '
+    FileOffset:      49
+    FilePath:        /home/Jake/Desktop/cpre563/base/src/layers/Compute_HLS.cpp
+    Replacements:    
+      - FilePath:        /home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp
+        Offset:          875035
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_49_2: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_51_3:  '
+    FileOffset:      51
+    FilePath:        /home/Jake/Desktop/cpre563/base/src/layers/Compute_HLS.cpp
+    Replacements:    
+      - FilePath:        /home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp
+        Offset:          875079
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_51_3: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_54_4:  '
+    FileOffset:      54
+    FilePath:        /home/Jake/Desktop/cpre563/base/src/layers/Compute_HLS.cpp
+    Replacements:    
+      - FilePath:        /home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp
+        Offset:          875138
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_54_4: '
+  - DiagnosticName:  xilinx-label-all-loops
+    Message:         'Added loop label VITIS_LOOP_59_5:  '
+    FileOffset:      59
+    FilePath:        /home/Jake/Desktop/cpre563/base/src/layers/Compute_HLS.cpp
+    Replacements:    
+      - FilePath:        /home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp
+        Offset:          875250
+        Length:          0
+        ReplacementText: 'VITIS_LOOP_59_5: '
+...

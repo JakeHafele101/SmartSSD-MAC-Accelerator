@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Mar 18 21:32:11 2024
+# Process ID: 276295
+# Current directory: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel
+# Command line: vivado -mode batch -source /tmp/vivado.14042652500816444394.tmp -notrace
+# Log file: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel/vivado.log
+# Journal file: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel/vivado.jou
+# Running On: mai-01, OS: Linux, CPU Frequency: 1985.997 MHz, CPU Physical cores: 32, Host memory: 540641 MB
+#-----------------------------------------------------------
+source /tmp/vivado.14042652500816444394.tmp -notrace

@@ -1,0 +1,95 @@
+
+extern "C" {
+
+#define STRIDE 16
+
+//	//Original Code
+//	void computePointHLS(float dataIn[800], float* dataOut_init, float layerWeight[800], float* layerBias, float* dataOut_final) {
+//	#pragma HLS interface mode=m_axi      port=dataIn
+//	#pragma HLS interface mode=m_axi      port=dataOut_init
+//	#pragma HLS interface mode=m_axi      port=layerWeight
+//	#pragma HLS interface mode=m_axi      port=layerBias
+//	#pragma HLS interface mode=m_axi      port=dataOut_final
+//
+////    	float dataOut_Internal = dataOut_init[0];
+////
+////		//Compute
+////        for (int i = 0; i < 32*5*5; i++) { //dataInDepth = 32
+////        	dataOut_Internal += dataIn[i] * layerWeight[i];
+////        }
+////
+////        dataOut_Internal += layerBias[0];
+////
+////    	//Store dataOut_data
+////        dataOut_final[0] = dataOut_Internal;
+//
+//
+//
+//	//New Attempt
+//
+//	float dataOut_Internal = dataOut_init[0];
+//
+//	float temp_add[STRIDE];
+//
+//	for(int i = 0; i < STRIDE; i++){
+//		temp_add[i] = 0;
+//	}
+//
+//	//Compute
+//	for (int i = 0; i < 800; i += STRIDE) {
+//		#pragma HLS pipeline
+//
+//		for(int j=0; j<STRIDE; j++){
+//			temp_add[j] += dataIn[i+j] * layerWeight[i+j];
+//		}
+//	}
+//
+//	for(int i=1; i<STRIDE; i++){
+//	#pragma HLS unroll
+//		temp_add[0] += temp_add[i];
+//	}
+//
+//	dataOut_Internal += temp_add[0];
+//
+//	dataOut_Internal += layerBias[0];
+//
+//	//Store dataOut_data
+//	dataOut_final[0] = dataOut_Internal;
+//
+//}
+
+	//Reduced inputs
+	void computePointHLS(float dataIn[800], float layerWeight[800], float* dataOut_final) {
+	#pragma HLS interface mode=m_axi      port=dataIn
+	#pragma HLS interface mode=m_axi      port=layerWeight
+	#pragma HLS interface mode=m_axi      port=dataOut_final
+
+	float dataOut_Internal = 0;
+
+	float temp_add[STRIDE];
+
+	for(int i = 0; i < STRIDE; i++){
+		temp_add[i] = 0;
+	}
+
+	//Compute
+	for (int i = 0; i < 800; i += STRIDE) {
+		#pragma HLS pipeline
+
+		for(int j=0; j<STRIDE; j++){
+			temp_add[j] += dataIn[i+j] * layerWeight[i+j];
+		}
+	}
+
+	for(int i=1; i<STRIDE; i++){
+	#pragma HLS unroll
+		temp_add[0] += temp_add[i];
+	}
+
+	//Store dataOut_data
+	dataOut_final[0] += temp_add[0];
+
+
+	}
+
+}

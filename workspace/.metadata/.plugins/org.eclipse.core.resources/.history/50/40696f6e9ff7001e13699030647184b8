@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ASCII"?>
+<hwlink:HwLinkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hwlink="http://www.xilinx.com/acceleration/hwlink" name="smartssd_system_hw_link" platform="/opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/xilinx_u2_gen3x4_xdma_gc_2_202110_1.xpfm" systemProject="smartssd_system" cpu="pl">
+  <configuration name="Emulation-SW" id="com.xilinx.ide.accel.config.hwlink.sw_emu.366531337">
+    <configBuildOptions xsi:type="hwlink:LinkOptions">
+      <binaryContainers name="computePointHLS">
+        <kernels name="computePointHLS" projectName="smartssd_kernels">
+          <computeUnits name="computePointHLS_1" slr="">
+            <args name="dataIn" master="true" memory=""/>
+            <args name="layerWeight" master="true" memory=""/>
+            <args name="dataOut_final" master="true" memory=""/>
+          </computeUnits>
+        </kernels>
+      </binaryContainers>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="hwlink:LinkOptions">
+      <binaryContainers name="computePointHLS">
+        <kernels name="computePointHLS" projectName="smartssd_kernels">
+          <computeUnits name="computePointHLS_1" slr="">
+            <args name="dataIn" master="true" memory=""/>
+            <args name="layerWeight" master="true" memory=""/>
+            <args name="dataOut_final" master="true" memory=""/>
+          </computeUnits>
+        </kernels>
+      </binaryContainers>
+    </lastBuildOptions>
+  </configuration>
+  <configuration name="Emulation-HW" id="com.xilinx.ide.accel.config.hwlink.hw_emu.762113781">
+    <configBuildOptions xsi:type="hwlink:LinkOptions" target="hw_emu">
+      <binaryContainers name="computePointHLS">
+        <kernels name="computePointHLS" projectName="smartssd_kernels">
+          <computeUnits name="computePointHLS_1" slr="">
+            <args name="dataIn" master="true" memory=""/>
+            <args name="layerWeight" master="true" memory=""/>
+            <args name="dataOut_final" master="true" memory=""/>
+          </computeUnits>
+        </kernels>
+      </binaryContainers>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="hwlink:LinkOptions" target="hw_emu">
+      <binaryContainers name="computePointHLS">
+        <kernels name="computePointHLS" projectName="smartssd_kernels">
+          <computeUnits name="computePointHLS_1" slr="">
+            <args name="dataIn" master="true" memory=""/>
+            <args name="dataOut_init" master="true" memory=""/>
+            <args name="layerWeight" master="true" memory=""/>
+            <args name="layerBias" master="true" memory=""/>
+            <args name="dataOut_final" master="true" memory=""/>
+          </computeUnits>
+        </kernels>
+      </binaryContainers>
+    </lastBuildOptions>
+  </configuration>
+  <configuration name="Hardware" id="com.xilinx.ide.accel.config.hwlink.hw.1628090708">
+    <configBuildOptions xsi:type="hwlink:LinkOptions" target="hw">
+      <binaryContainers name="computePointHLS">
+        <kernels name="computePointHLS" projectName="smartssd_kernels">
+          <computeUnits name="computePointHLS_1" slr="">
+            <args name="dataIn" master="true" memory=""/>
+            <args name="layerWeight" master="true" memory=""/>
+            <args name="dataOut_final" master="true" memory=""/>
+          </computeUnits>
+        </kernels>
+      </binaryContainers>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="hwlink:LinkOptions" target="hw">
+      <binaryContainers name="computePointHLS">
+        <kernels name="computePointHLS" projectName="smartssd_kernels">
+          <computeUnits name="computePointHLS_1" slr="">
+            <args name="dataIn" master="true" memory=""/>
+            <args name="layerWeight" master="true" memory=""/>
+            <args name="dataOut_final" master="true" memory=""/>
+          </computeUnits>
+        </kernels>
+      </binaryContainers>
+    </lastBuildOptions>
+  </configuration>
+</hwlink:HwLinkProject>

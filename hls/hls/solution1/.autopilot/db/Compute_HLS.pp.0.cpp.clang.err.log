@@ -1,0 +1,22 @@
+/home/Jake/Desktop/cpre563/hls/hls/solution1/csynth.tcl:17:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=top_XLX_SEP_ PragmaContext=directive_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=name=computePointHLS_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLSDIRECTIVE TOP name=computePointHLS
+        ^
+/home/Jake/Desktop/cpre563/hls/hls/solution1/directives.tcl:6:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=top_XLX_SEP_ PragmaContext=directive_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=name=computePointHLS_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLSDIRECTIVE TOP name=computePointHLS
+        ^
+../base/src/layers/Compute_HLS.cpp:39:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=interface_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=mode=m_axi port=dataIn bundle=gmem0_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLS interface mode=m_axi port=dataIn bundle=gmem0
+        ^
+../base/src/layers/Compute_HLS.cpp:40:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=interface_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=mode=m_axi port=layerWeight bundle=gmem1_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLS interface mode=m_axi port=layerWeight bundle=gmem1
+        ^
+../base/src/layers/Compute_HLS.cpp:41:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=interface_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=mode=m_axi port=dataOut_final bundle=gmem0_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLS interface mode=m_axi port=dataOut_final bundle=gmem0
+        ^
+../base/src/layers/Compute_HLS.cpp:52:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=pipeline_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLS pipeline
+        ^
+../base/src/layers/Compute_HLS.cpp:60:9: warning: HLS pragma dump _XLX_SEP_ PragmaIsValid=1_XLX_SEP_ PragmaType=unroll_XLX_SEP_ PragmaContext=_XLX_SEP_ PragmaFunction=computePointHLS_XLX_SEP_ PragmaOptions=_XLX_SEP_ [-Wdump-hls-pragmas]
+#pragma HLS unroll
+        ^
+7 warnings generated.

@@ -1,0 +1,28 @@
+
+extern "C" {
+
+    //Compute the convolution using threads
+    //void computeLoop(const Array3D_fp32 &dataIn_data, const Array3D_fp32 &dataOut_data, const Array4D_fp32 &layerWeight_data, const Array1D_fp32 &layerBias_data) {
+    void computePointHLS(float dataIn[800], float* dataOut_init, float layerWeight[800], float* layerBias, float* dataOut_final) {
+	#pragma HLS interface mode=m_axi      port=dataIn
+	#pragma HLS interface mode=m_axi  port=dataOut_init
+	#pragma HLS interface mode=m_axi      port=layerWeight
+	#pragma HLS interface mode=m_axi  port=layerBias
+	#pragma HLS interface mode=m_axi  port=dataOut_final
+
+
+    	float dataOut_Internal = dataOut_init[0];
+
+		//Compute
+        for (int i = 0; i < 32*5*5; i++) { //dataInDepth = 32
+        	dataOut_Internal += dataIn[i] * layerWeight[i];
+        }
+
+        dataOut_Internal += layerBias[0];
+
+    	//Store dataOut_data
+        dataOut_init[0] = dataOut_Internal;
+                
+    }
+
+}

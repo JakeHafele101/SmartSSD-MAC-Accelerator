@@ -1,0 +1,6 @@
+2024-04-09T13:45:02.66476700255-13:45:02 **** Incremental Build of configuration Emulation-HW for project smartssd_kernels ****
+000-make -j64 all 
+000-make: Nothing to be done for 'all'.
+00255-
+13:45:02 Build Finished (took 176ms)
+

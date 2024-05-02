@@ -1,0 +1,25 @@
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32318:2: warning: Added loop label VITIS_LOOP_45_1:   [xilinx-label-all-loops]
+ for(int i = 0; i < 32; i++){
+ ^~~
+ VITIS_LOOP_45_1: 
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32318:2: note: FIX-IT applied suggested code changes
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32322:2: warning: Added loop label VITIS_LOOP_49_2:   [xilinx-label-all-loops]
+ for(int point = 0; point < 90; point++){
+ ^~~
+ VITIS_LOOP_49_2: 
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32322:2: note: FIX-IT applied suggested code changes
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32324:3: warning: Added loop label VITIS_LOOP_51_3:   [xilinx-label-all-loops]
+  for (int i = 0; i < 800; i += 32) {
+  ^~~
+  VITIS_LOOP_51_3: 
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32324:3: note: FIX-IT applied suggested code changes
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32327:2: warning: Added loop label VITIS_LOOP_54_4:   [xilinx-label-all-loops]
+ for(int j=0; j<32; j++){
+ ^~~
+ VITIS_LOOP_54_4: 
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32327:2: note: FIX-IT applied suggested code changes
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32332:3: warning: Added loop label VITIS_LOOP_59_5:   [xilinx-label-all-loops]
+  for(int i=1; i<32; i++){
+  ^~~
+  VITIS_LOOP_59_5: 
+/home/Jake/Desktop/cpre563/hls/hls/solution1/.autopilot/db/Compute_HLS.pp.0.cpp:32332:3: note: FIX-IT applied suggested code changes

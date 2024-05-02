@@ -1,0 +1,40 @@
+2024-04-10T21:50:32.56255800255-21:50:32 **** Incremental Build of configuration Hardware for project smartssd_kernels ****
+000-make -j64 all 
+000-/mnt/xilinx-dev-env/Vitis/2022.2/bin/v++ --target hw --compile -I"../src/layers" --config computePointHLS-compile.cfg -o"build/computePointHLS.xo" "../src/layers/Compute_HLS.cpp"
+000-Option Map File Used: '/mnt/xilinx-dev-env/Vitis/2022.2/data/vitis/vpp/optMap.xml'
+000-
+000-****** v++ v2022.2 (64-bit)
+000-  **** SW Build 3671529 on 2022-10-13-17:52:11
+000-    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+000-
+000-INFO: [v++ 60-1306] Additional information associated with this v++ compile can be found at:
+000-	Reports: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/reports/computePointHLS
+000-	Log files: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/logs/computePointHLS
+000-Running Dispatch Server on port: 36619
+000-INFO: [v++ 60-1548] Creating build summary session with primary output /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/computePointHLS.xo.compile_summary, at Wed Apr 10 21:50:44 2024
+000-INFO: [v++ 60-1315] Creating rulecheck session with output '/home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/reports/computePointHLS/computePointHLS_guidance.html', at Wed Apr 10 21:50:44 2024
+000-INFO: [v++ 60-895]   Target platform: /opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/xilinx_u2_gen3x4_xdma_gc_2_202110_1.xpfm
+000-INFO: [v++ 60-1578]   This platform contains Xilinx Shell Archive '/opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/hw/hw.xsa'
+000-INFO: [v++ 74-78] Compiler Version string: 2022.2
+000-INFO: [v++ 60-585] Compiling for hardware target
+000-INFO: [v++ 60-423]   Target device: xilinx_u2_gen3x4_xdma_gc_2_202110_1
+000-INFO: [v++ 60-242] Creating kernel: 'computePointHLS'
+000-
+000-===>The following messages were generated while  performing high-level synthesis for kernel: computePointHLS Log file: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/computePointHLS/computePointHLS/vitis_hls.log :
+000-INFO: [v++ 204-61] Pipelining loop 'VITIS_LOOP_104_2'.
+000-INFO: [v++ 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 1, loop 'VITIS_LOOP_104_2'
+000-INFO: [v++ 204-61] Pipelining loop 'VITIS_LOOP_109_3'.
+000-INFO: [v++ 200-1470] Pipelining result : Target II = NA, Final II = 11, Depth = 31, loop 'VITIS_LOOP_109_3'
+000-INFO: [v++ 200-790] **** Loop Constraint Status: All loop constraints were NOT satisfied.
+000-INFO: [v++ 200-789] **** Estimated Fmax: 338.89 MHz
+000-INFO: [v++ 60-594] Finished kernel compilation
+000-INFO: [v++ 60-244] Generating system estimate report...
+000-INFO: [v++ 60-1092] Generated system estimate report: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/reports/computePointHLS/system_estimate_computePointHLS.xtxt
+000-INFO: [v++ 60-586] Created build/computePointHLS.xo
+000-INFO: [v++ 60-2343] Use the vitis_analyzer tool to visualize and navigate the relevant reports. Run the following command. 
+000-    vitis_analyzer /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/Hardware/build/computePointHLS.xo.compile_summary 
+000-INFO: [v++ 60-791] Total elapsed time: 0h 1m 0s
+000-INFO: [v++ 60-1653] Closing dispatch client.
+00255-
+21:51:34 Build Finished (took 1m:2s.179ms)
+

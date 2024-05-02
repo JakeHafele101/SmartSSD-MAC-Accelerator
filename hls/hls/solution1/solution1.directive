@@ -1,0 +1,15 @@
+<AutoPilot:ProjectResources xmlns:AutoPilot="com.autoesl.autopilot.ui.directiveView">
+    <sourceFile name="">
+        <directive functionName="computePointHLS" label="" functionLabel="">
+            <pragma name="TOP">
+                <option name="name" value="computePointHLS"/>
+            </pragma>
+        </directive>
+        <directive functionName="computePointHLS" label="" functionLabel="">
+            <pragma name="TOP">
+                <option name="name" value="computePointHLS"/>
+            </pragma>
+        </directive>
+    </sourceFile>
+</AutoPilot:ProjectResources>
+

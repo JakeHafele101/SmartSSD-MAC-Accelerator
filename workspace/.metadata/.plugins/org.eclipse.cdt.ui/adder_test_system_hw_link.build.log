@@ -1,0 +1,6 @@
+16:22:19 **** Incremental Build of configuration Emulation-SW for project adder_test_system_hw_link ****
+make all 
+make: Nothing to be done for 'all'.
+
+16:22:19 Build Finished (took 190ms)
+

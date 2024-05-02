@@ -1,0 +1,31 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Mar 18 21:36:26 2024
+# Process ID: 276690
+# Current directory: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel
+# Command line: vivado -mode batch -source /tmp/vivado.3431266431972551872.tmp -notrace
+# Log file: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel/vivado.log
+# Journal file: /home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel/vivado.jou
+# Running On: mai-01, OS: Linux, CPU Frequency: 1140.392 MHz, CPU Physical cores: 32, Host memory: 540641 MB
+#-----------------------------------------------------------
+source /tmp/vivado.3431266431972551872.tmp -notrace
+INFO: [filemgmt 56-3] Default IP Output Path : Could not find the directory '/home/Jake/Desktop/cpre563/workspace/smartssd_kernels/vivado_rtl_kernel/vivado_rtl_kernel.gen/sources_1'.
+Scanning sources...
+Finished scanning sources
+open_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1721.391 ; gain = 88.805 ; free physical = 478918 ; free virtual = 497431
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/xilinx-dev-env/Vivado/2022.2/data/ip'.
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/1.0/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.2 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.2/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es_revb:part0:1.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120_revb/es/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180_es:part0:1.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/es/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/production/2.0/board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/production/2.0/board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:2.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/2.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at /mnt/xilinx-dev-env/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670ld/1.0/board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+start_ip_gui: Time (s): cpu = 00:00:51 ; elapsed = 00:01:14 . Memory (MB): peak = 7107.484 ; gain = 5386.094 ; free physical = 487505 ; free virtual = 506040
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 18 21:37:51 2024...

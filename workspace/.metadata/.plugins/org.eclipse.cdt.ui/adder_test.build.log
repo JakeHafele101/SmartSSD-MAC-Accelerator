@@ -1,0 +1,6 @@
+16:22:18 **** Incremental Build of configuration Emulation-SW for project adder_test ****
+make -j64 all 
+make: Nothing to be done for 'all'.
+
+16:22:18 Build Finished (took 198ms)
+

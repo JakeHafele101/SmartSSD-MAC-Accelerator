@@ -1,0 +1,425 @@
+/**
+* Copyright (C) 2019-2021 Xilinx, Inc
+*
+* Licensed under the Apache License, Version 2.0 (the "License"). You may
+* not use this file except in compliance with the License. A copy of the
+* License is located at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+* License for the specific language governing permissions and limitations
+* under the License.
+*/
+
+// OpenCL utility layer include
+#include "cmdlineparser.h"
+#include "xcl2.hpp"
+#include <fcntl.h>
+#include <fstream>
+#include <iomanip>
+#include <iosfwd>
+#include <iostream>
+#include <unistd.h>
+#include <vector>
+#include <math.h>
+#include <errno.h>
+#include <chrono>
+using namespace std::chrono;
+
+#define BLOCK_SIZE_BYTES 4096
+
+#define NUM_WRITE 1024
+#define NUM_READ  128
+
+#define NUM_BLOCKS 200   //90 works
+#define NUM_POINTS 115
+
+#define IN_OFFSET 10
+#define OUT_INIT_OFFSET 40
+#define WEIGHT_OFFSET 210
+#define BIAS_OFFSET 60
+#define OUT_FINAL_OFFSET 400
+
+#define LOOP_ITERATIONS 800
+
+int main(int argc, char** argv) {
+
+    // Command Line Parser
+    sda::utils::CmdLineParser parser;
+
+    // Switches
+    //**************//"<Full Arg>",  "<Short Arg>", "<Description>", "<Default>"
+    parser.addSwitch("--xclbin_file", "-x", "input binary file string", "");
+    parser.addSwitch("--file_path", "-p", "file path string", "");
+    parser.addSwitch("--input_file", "-f", "input file string", "");
+    parser.addSwitch("--device", "-d", "device id", "0");
+    parser.parse(argc, argv);
+
+    // Read settings
+    auto binaryFile = parser.value("xclbin_file");
+    std::string filepath = parser.value("file_path");
+    std::string dev_id = parser.value("device");
+    std::string filename;
+
+//    if (argc < 5) {
+//        parser.printHelp();
+//        return EXIT_FAILURE;
+//    }
+
+    if (filepath.empty()) {
+        std::cout << "\nWARNING: As file path is not provided using -p option, going with -f option which is local "
+                     "file testing. Please use -p option, if looking for actual p2p operation on NVMe drive.\n";
+        filename = parser.value("input_file");
+    } else {
+        std::cout << "\nWARNING: Ignoring -f option when -p options is set. -p has high precedence over -f.\n";
+        filename = filepath;
+    }
+
+    int nvmeFd = -1;
+
+    cl_int err;
+    cl::Context context;
+    cl::CommandQueue q;
+
+    // OPENCL HOST CODE AREA START
+    // get_xil_devices() is a utility API which will find the xilinx
+    // platforms and will return list of devices connected to Xilinx platform
+    auto devices = xcl::get_xil_devices();
+    // read_binary_file() is a utility API which will load the binaryFile
+    // and will return the pointer to file buffer.
+    auto fileBuf = xcl::read_binary_file(binaryFile);
+    cl::Program::Binaries bins{{fileBuf.data(), fileBuf.size()}};
+    cl::Program program;
+
+    auto pos = dev_id.find(":");
+    cl::Device device;
+    if (pos == std::string::npos) {
+        uint32_t device_index = stoi(dev_id);
+        if (device_index >= devices.size()) {
+            std::cout << "The device_index provided using -d flag is outside the range of "
+                         "available devices\n";
+            return EXIT_FAILURE;
+        }
+        device = devices[device_index];
+    } else {
+        if (xcl::is_emulation()) {
+            std::cout << "Device bdf is not supported for the emulation flow\n";
+            return EXIT_FAILURE;
+        }
+        device = xcl::find_device_bdf(devices, dev_id);
+    }
+
+    if (xcl::is_hw_emulation()) {
+        auto device_name = device.getInfo<CL_DEVICE_NAME>();
+        if (device_name.find("2018") != std::string::npos) {
+            std::cout << "[INFO]: The example is not supported for " << device_name
+                      << " this platform for hw_emu. Please try other flows." << '\n';
+            return EXIT_SUCCESS;
+        }
+    }
+
+    // Creating Context and Command Queue for selected Device
+    OCL_CHECK(err, context = cl::Context(device, nullptr, nullptr, nullptr, &err));
+    OCL_CHECK(err, q = cl::CommandQueue(context, device, CL_QUEUE_PROFILING_ENABLE, &err));
+    std::cout << "Trying to program device[" << dev_id << "]: " << device.getInfo<CL_DEVICE_NAME>() << std::endl;
+    program = cl::Program(context, {device}, bins, nullptr, &err);
+    if (err != CL_SUCCESS) {
+        std::cout << "Failed to program device[" << dev_id << "] with xclbin file!\n";
+        exit(EXIT_FAILURE);
+    } else
+        std::cout << "Device[" << dev_id << "]: program successful!\n";
+
+    // P2P transfer from host to SSD
+    std::cout << "###########################################################\n";
+    std::cout << "           Doing matrix convolution w/ P2P read/write      \n";
+    std::cout << "###########################################################\n";
+    // Get access to the NVMe SSD.
+    nvmeFd = open(filename.c_str(), O_RDWR | O_DIRECT);
+    if (nvmeFd < 0) {
+        std::cerr << "ERROR: open " << filename << " failed with error code " << errno << std::endl;
+        return EXIT_FAILURE;
+    }
+    std::cout << "INFO: Successfully opened NVME SSD " << filename << std::endl;
+
+    //Create Test Values
+	//size_t in_data_vector_size_bytes = sizeof(float) * BLOCK_SIZE_BYTES; //IN_DATA_ELEMENTS
+	//size_t in_weight_vector_size_bytes = sizeof(float) * IN_WEIGHT_ELEMENTS;
+	//size_t in_bias_vector_size_bytes = sizeof(float) * IN_BIAS_ELEMENTS;
+	//size_t out_data_vector_size_bytes = sizeof(float) * OUT_DATA_ELEMENTS;
+
+	size_t vector_size_bytes_write = sizeof(float) * NUM_WRITE * NUM_BLOCKS;
+	size_t vector_size_bytes_read = sizeof(float) * NUM_READ;
+
+	std::cout << "Generating Test Input Values\n";
+    std::vector<float, aligned_allocator<float> > in_data(NUM_WRITE * NUM_BLOCKS, 1);
+    std::vector<float, aligned_allocator<float> > in_weight(NUM_WRITE * NUM_BLOCKS, 2);
+    std::vector<float, aligned_allocator<float> > in_bias(NUM_POINTS, 3);
+    std::vector<float, aligned_allocator<float> > out_init(NUM_POINTS, 0);
+    std::vector<float, aligned_allocator<float> > out_final(NUM_READ, 5);
+
+    float test_write = in_data[0];
+    printf("Host in_data BEFORE Host pwrite: %f \n", in_data[0]);
+
+    auto start = high_resolution_clock::now();
+
+    //Write the initial data to the SSD
+	std::cout << "Writing initial data to SSD\n";
+	if (pwrite(nvmeFd, static_cast<void*>(in_data.data()), vector_size_bytes_write, BLOCK_SIZE_BYTES * IN_OFFSET) < 0) { //Error if <0
+			printf("WRITE FAIL! %s\n", strerror(errno));
+			exit(EXIT_FAILURE);
+	}
+//	if (pwrite(nvmeFd, static_cast<void*>(out_init.data()), vector_size_bytes_write, BLOCK_SIZE_BYTES * OUT_INIT_OFFSET) < 0) { //Error if <0
+//			printf("WRITE FAIL! %s\n", strerror(errno));
+//			exit(EXIT_FAILURE);
+//	}
+	if (pwrite(nvmeFd, static_cast<void*>(in_weight.data()), vector_size_bytes_write, BLOCK_SIZE_BYTES * WEIGHT_OFFSET) < 0) { //Error if <0
+			printf("WRITE FAIL! %s\n", strerror(errno));
+			exit(EXIT_FAILURE);
+	}
+//	if (pwrite(nvmeFd, static_cast<void*>(in_bias.data()), vector_size_bytes_write, BLOCK_SIZE_BYTES * BIAS_OFFSET) < 0) { //Error if <0
+//			printf("WRITE FAIL! %s\n", strerror(errno));
+//			exit(EXIT_FAILURE);
+//	}
+
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop - start);
+	printf("Host to SSD Write: %ld us \n", duration.count());
+
+    //Test SSD to Host readback, verify test inputs written
+	in_data[0] = 0;
+
+    if (pread(nvmeFd, static_cast<void*>(in_data.data()), vector_size_bytes_write, BLOCK_SIZE_BYTES * IN_OFFSET) <= 0) {
+        std::cerr << "ERR: pread failed: "
+                  << " error: " << strerror(errno) << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    printf("SSD in_data AFTER Host pread: %f \n", in_data[0]);
+
+    if (in_data[0] != test_write){
+		printf("Error! Expected data_in: %f, Actual data_in: %f  \n", test_write, in_data[0]);
+		exit(EXIT_FAILURE);
+    }
+
+	//Write data to FPGA, call program, write back to SSD
+    std::cout << "Called p2p_read_write()\n";
+
+	//p2p_read_write(nvmeFd, context, q, program);
+
+	//FUNCTION
+	//Create the kernel
+	cl::Kernel krnl_computePointHLS;
+	OCL_CHECK(err, krnl_computePointHLS = cl::Kernel(program, "computePointHLS", &err));
+
+	//Create P2P Buffers
+	cl_mem_ext_ptr_t inExtData, inExtDataInit, inExtWeight, inExtBias, outExtDataFinal;
+	//P2P from SSD to device buffers
+	inExtData = {XCL_MEM_EXT_P2P_BUFFER, nullptr, 0};
+	//inExtDataInit = {XCL_MEM_EXT_P2P_BUFFER, nullptr, 0};
+	inExtWeight = {XCL_MEM_EXT_P2P_BUFFER, nullptr, 0};
+	//inExtBias = {XCL_MEM_EXT_P2P_BUFFER, nullptr, 0};
+
+	//P2P from device buffers to SSD
+	outExtDataFinal = {XCL_MEM_EXT_P2P_BUFFER, nullptr, 0};
+
+	//Create SSD->gmem buffer (1 for each input array)
+	OCL_CHECK(err, cl::Buffer buffer_input_p2p_read_in_data(context, CL_MEM_READ_ONLY | CL_MEM_EXT_PTR_XILINX, vector_size_bytes_write, &inExtData, &err));
+	//OCL_CHECK(err, cl::Buffer buffer_input_p2p_read_out_init(context, CL_MEM_READ_ONLY | CL_MEM_EXT_PTR_XILINX, vector_size_bytes_write, &inExtDataInit, &err));
+	OCL_CHECK(err, cl::Buffer buffer_input_p2p_read_in_weight(context, CL_MEM_READ_ONLY | CL_MEM_EXT_PTR_XILINX, vector_size_bytes_write, &inExtWeight, &err));
+	//OCL_CHECK(err, cl::Buffer buffer_input_p2p_read_in_bias(context, CL_MEM_READ_ONLY | CL_MEM_EXT_PTR_XILINX, vector_size_bytes_write, &inExtBias, &err));
+
+	//Create gmem->SSD buffer
+	OCL_CHECK(err, cl::Buffer buffer_output_p2p_write_out_final(context, CL_MEM_WRITE_ONLY | CL_MEM_EXT_PTR_XILINX, vector_size_bytes_read, &outExtDataFinal, &err));
+
+	//Map P2P buffers into host space
+	std::cout << "\nMap NVME buffer to host access pointers\n" << std::endl;
+	float* p2pPtrRead_in_data = (float*)q.enqueueMapBuffer(buffer_input_p2p_read_in_data,      // buffer
+									   CL_TRUE,           // blocking call
+									   CL_MAP_READ,       // Indicates we will be writing
+									   0,                 // buffer offset
+									   vector_size_bytes_write, // size in bytes
+									   nullptr, nullptr,
+									   &err); // error code
+//	float* p2pPtrRead_in_out_init = (float*)q.enqueueMapBuffer(buffer_input_p2p_read_out_init,			// buffer
+//									  CL_TRUE,                    // blocking call
+//									  CL_MAP_READ, // Indicates we will be writing and reading
+//									  0,                          // buffer offset
+//									  vector_size_bytes_write,          // size in bytes
+//									  nullptr, nullptr,
+//									  &err); // error code
+	float* p2pPtrRead_in_weight = (float*)q.enqueueMapBuffer(buffer_input_p2p_read_in_weight,      // buffer
+									   CL_TRUE,           // blocking call
+									   CL_MAP_READ,       // Indicates we will be writing
+									   0,                 // buffer offset
+									   vector_size_bytes_write, // size in bytes
+									   nullptr, nullptr,
+									   &err); // error code
+//	float* p2pPtrRead_in_bias = (float*)q.enqueueMapBuffer(buffer_input_p2p_read_in_bias,      // buffer
+//									   CL_TRUE,           // blocking call
+//									   CL_MAP_READ,       // Indicates we will be writing
+//									   0,                 // buffer offset
+//									   vector_size_bytes_write, // size in bytes
+//									   nullptr, nullptr,
+//									   &err); // error code
+
+	//Map buffer_output_p2p_write and do P2P write from device memory back to SSD
+	void* p2pPtrWrite_out_data_final = q.enqueueMapBuffer(buffer_output_p2p_write_out_final,			// buffer
+									  CL_TRUE,                    // blocking call
+									  CL_MAP_WRITE | CL_MAP_READ, // Indicates we will be writing and reading
+									  0,                          // buffer offset
+									  vector_size_bytes_read,          // size in bytes
+									  nullptr, nullptr,
+									  &err); // error code
+
+	std::cout << "Now start P2P Read from SSD to FPGA DRAM\n" << std::endl;
+	//First input array starts at 0 and fits within BLOCK_SIZE_BYTES
+	//pread returns number of bytes read
+
+//	printf("FPGA DRAM data BEFORE SSD pread: %f \n", p2pPtrRead_in_data[0]);
+//	printf("FPGA DRAM in_data: %f \n", p2pPtrRead_in_data[0]);
+//	printf("FPGA DRAM out_init: %f \n", p2pPtrRead_in_out_init[0]);
+//	printf("FPGA DRAM in_weight: %f \n", p2pPtrRead_in_weight[0]);
+//	printf("FPGA DRAM in_bias: %f \n", p2pPtrRead_in_bias[0]);
+
+	//int bytes = pread(nvmeFd, (void*)p2pPtrRead_in_data, vector_size_bytes, BLOCK_SIZE_BYTES * IN_OFFSET);
+	//printf("Bytes read from in_data to FPGA: %d \n", bytes);
+
+	start = high_resolution_clock::now();
+
+	if (pread(nvmeFd, (void*)p2pPtrRead_in_data, vector_size_bytes_write, BLOCK_SIZE_BYTES * IN_OFFSET) <= 0) {
+		std::cerr << "ERR: pread failed: "
+				  << " error: " << strerror(errno) << std::endl;
+		exit(EXIT_FAILURE);
+	}
+//	if (pread(nvmeFd, (void*)p2pPtrRead_in_out_init, vector_size_bytes_write, BLOCK_SIZE_BYTES * OUT_INIT_OFFSET) <= 0) {
+//		std::cerr << "ERR: pread failed: "
+//				  << " error: " << strerror(errno) << std::endl;
+//		exit(EXIT_FAILURE);
+//	}
+	if (pread(nvmeFd, (void*)p2pPtrRead_in_weight, vector_size_bytes_write, BLOCK_SIZE_BYTES * WEIGHT_OFFSET) <= 0) {
+		std::cerr << "ERR: pread failed: "
+				  << " error: " << strerror(errno) << std::endl;
+		exit(EXIT_FAILURE);
+	}
+//	if (pread(nvmeFd, (void*)p2pPtrRead_in_bias, vector_size_bytes_write, BLOCK_SIZE_BYTES * BIAS_OFFSET) <= 0) {
+//		std::cerr << "ERR: pread failed: "
+//				  << " error: " << strerror(errno) << std::endl;
+//		exit(EXIT_FAILURE);
+//	}
+
+	stop = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(stop - start);
+	printf("SSD to FPGA write for single point: %ld us \n", duration.count());
+
+//	printf("FPGA DRAM data AFTER SSD pread: %f \n", p2pPtrRead_in_data[0]);
+//	printf("FPGA DRAM in_data: %f \n", p2pPtrRead_in_data[0]);
+//	printf("FPGA DRAM out_init: %f \n", p2pPtrRead_in_out_init[0]);
+//	printf("FPGA DRAM in_weight: %f \n", p2pPtrRead_in_weight[0]);
+//	printf("FPGA DRAM in_bias: %f \n", p2pPtrRead_in_bias[0]);
+
+
+	// Set the Kernel Arguments
+	OCL_CHECK(err, err = krnl_computePointHLS.setArg(0, buffer_input_p2p_read_in_data));
+	OCL_CHECK(err, err = krnl_computePointHLS.setArg(1, buffer_input_p2p_read_in_weight));
+	OCL_CHECK(err, err = krnl_computePointHLS.setArg(2, buffer_output_p2p_write_out_final));
+
+	//Launch kernel, single point
+	start = high_resolution_clock::now();
+
+	OCL_CHECK(err, err = q.enqueueTask(krnl_computePointHLS));
+	OCL_CHECK(err, err = q.finish());
+
+	stop = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(stop - start);
+	printf("Kernel Duration for single point: %ld us \n", duration.count());
+
+	//Convolve full layer
+	start = high_resolution_clock::now();
+
+	for(int i = 0; i < 1116; i++){ //100352/90 = 1115.02 ~1116
+
+		if (pread(nvmeFd, (void*)p2pPtrRead_in_data, vector_size_bytes_write, BLOCK_SIZE_BYTES * IN_OFFSET) <= 0) {
+			std::cerr << "ERR: pread failed: "
+					  << " error: " << strerror(errno) << std::endl;
+			exit(EXIT_FAILURE);
+		}
+//		if (pread(nvmeFd, (void*)p2pPtrRead_in_out_init, vector_size_bytes_write, BLOCK_SIZE_BYTES * OUT_INIT_OFFSET) <= 0) {
+//			std::cerr << "ERR: pread failed: "
+//					  << " error: " << strerror(errno) << std::endl;
+//			exit(EXIT_FAILURE);
+//		}
+		if (pread(nvmeFd, (void*)p2pPtrRead_in_weight, vector_size_bytes_write, BLOCK_SIZE_BYTES * WEIGHT_OFFSET) <= 0) {
+			std::cerr << "ERR: pread failed: "
+					  << " error: " << strerror(errno) << std::endl;
+			exit(EXIT_FAILURE);
+		}
+//		if (pread(nvmeFd, (void*)p2pPtrRead_in_bias, vector_size_bytes_write, BLOCK_SIZE_BYTES * BIAS_OFFSET) <= 0) {
+//			std::cerr << "ERR: pread failed: "
+//					  << " error: " << strerror(errno) << std::endl;
+//			exit(EXIT_FAILURE);
+//		}
+
+		OCL_CHECK(err, err = q.enqueueTask(krnl_computePointHLS));
+		OCL_CHECK(err, err = q.finish());
+
+		//Write the output from the FPGA to the SSD
+		if (pwrite(nvmeFd, (void*)p2pPtrWrite_out_data_final, vector_size_bytes_read, BLOCK_SIZE_BYTES * OUT_FINAL_OFFSET) < 0) { //Error if <0
+				printf("WRITE FAIL! %s\n", strerror(errno));
+				exit(EXIT_FAILURE);
+		}
+
+	}
+
+	stop = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(stop - start);
+	printf("Kernel Duration for full layer: %ld us \n", duration.count());
+
+	 std::cout << "Now start P2P write from FPGA to SSD\n" << std::endl;
+
+	start = high_resolution_clock::now();
+
+	//Write the output from the FPGA to the SSD
+	if (pwrite(nvmeFd, (void*)p2pPtrWrite_out_data_final, vector_size_bytes_read, BLOCK_SIZE_BYTES * OUT_FINAL_OFFSET) < 0) { //Error if <0
+			printf("WRITE FAIL! %s\n", strerror(errno));
+			exit(EXIT_FAILURE);
+	}
+
+	stop = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(stop - start);
+	printf("FPGA to SSD write for single point: %ld us \n", duration.count());
+
+    //Compute expected value:
+	float expected = out_init[0];
+    for (int i = 0; i < LOOP_ITERATIONS; i++) { //dataInDepth = 32
+    	expected += in_data[i] * in_weight[i];
+    }
+    expected += in_bias[0];
+	printf("Expected Output: %f\n", expected);
+
+	//Read results
+	start = high_resolution_clock::now();
+
+	 std::cout << "Now start P2P read from SSD to Host\n" << std::endl;
+
+	if (pread(nvmeFd, static_cast<void*>(out_final.data()), vector_size_bytes_read, BLOCK_SIZE_BYTES * OUT_FINAL_OFFSET) < 0) { //Error if <0
+			printf("READ FAIL! %s\n", strerror(errno));
+			exit(EXIT_FAILURE);
+	}
+
+    stop = high_resolution_clock::now();
+    duration = duration_cast<microseconds>(stop - start);
+    printf("Time for read from SSD to Host: %ld us \n", duration.count());
+
+    float actual_out = out_final[0] + in_bias[0] + out_init[0];
+
+	printf("Kernel Output: %f \n", out_final[0]);
+	printf("Kernel Output with bias/out sum: %f \n", actual_out);
+
+    (void)close(nvmeFd);
+
+    std::cout << "TEST COMPLETE" << std::endl;
+    return 0;
+}

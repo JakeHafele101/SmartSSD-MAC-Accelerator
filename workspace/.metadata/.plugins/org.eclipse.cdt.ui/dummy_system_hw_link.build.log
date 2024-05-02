@@ -1,0 +1,34 @@
+22:40:29 **** Build of configuration Emulation-SW for project dummy_system_hw_link ****
+make all 
+/mnt/xilinx-dev-env/Vitis/2022.2/bin/v++ --target sw_emu --link --config adder-link.cfg -o"adder.xclbin" ../../dummy_kernels/Emulation-SW/build/adder.xo
+Option Map File Used: '/mnt/xilinx-dev-env/Vitis/2022.2/data/vitis/vpp/optMap.xml'
+
+****** v++ v2022.2 (64-bit)
+  **** SW Build 3671529 on 2022-10-13-17:52:11
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+INFO: [v++ 60-1306] Additional information associated with this v++ link can be found at:
+	Reports: /home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.build/reports/link
+	Log files: /home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.build/logs/link
+Running Dispatch Server on port: 44829
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.xclbin.link_summary, at Wed Mar 20 22:40:41 2024
+INFO: [v++ 60-1315] Creating rulecheck session with output '/home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.build/reports/link/link_guidance.html', at Wed Mar 20 22:40:41 2024
+INFO: [v++ 60-895]   Target platform: /opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/xilinx_u2_gen3x4_xdma_gc_2_202110_1.xpfm
+INFO: [v++ 60-1578]   This platform contains Xilinx Shell Archive '/opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/hw/hw.xsa'
+INFO: [v++ 74-78] Compiler Version string: 2022.2
+INFO: [v++ 60-629] Linking for software emulation target
+INFO: [v++ 60-423]   Target device: xilinx_u2_gen3x4_xdma_gc_2_202110_1
+INFO: [v++ 60-645] kernel flags are '-g -I /home/Jake/Desktop/cpre563/workspace/dummy_kernels/src -g'
+Check POST-VPL, containing 1 checks, has run: 0 errors
+INFO: [v++ 60-586] Created adder.xclbin
+INFO: [v++ 60-1307] Run completed. Additional information can be found in:
+	Guidance: /home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.build/reports/link/link_guidance.html
+	Steps Log File: /home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.build/logs/link/link.steps.log
+
+INFO: [v++ 60-2343] Use the vitis_analyzer tool to visualize and navigate the relevant reports. Run the following command. 
+    vitis_analyzer /home/Jake/Desktop/cpre563/workspace/dummy_system_hw_link/Emulation-SW/adder.xclbin.link_summary 
+INFO: [v++ 60-791] Total elapsed time: 0h 0m 18s
+INFO: [v++ 60-1653] Closing dispatch client.
+
+22:40:49 Build Finished (took 19s.900ms)
+

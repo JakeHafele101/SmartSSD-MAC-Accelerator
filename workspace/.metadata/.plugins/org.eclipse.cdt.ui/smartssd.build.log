@@ -1,0 +1,6 @@
+21:50:31 **** Incremental Build of configuration Hardware for project smartssd ****
+make -j64 all 
+make: Nothing to be done for 'all'.
+
+21:50:32 Build Finished (took 183ms)
+

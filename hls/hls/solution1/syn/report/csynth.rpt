@@ -1,0 +1,252 @@
+
+
+================================================================
+== Synthesis Summary Report of 'computePointHLS'
+================================================================
++ General Information: 
+    * Date:           Wed Apr 10 14:30:15 2024
+    * Version:        2022.2 (Build 3670227 on Oct 13 2022)
+    * Project:        hls
+    * Solution:       solution1 (Vitis Kernel Flow Target)
+    * Product family: kintexuplus
+    * Target device:  xcku15p-ffva1156-2L-e
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +----------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+------+---------+------------+------------+-----+
+    |                    Modules                   | Issue|      | Latency |  Latency  | Iteration|         | Trip |          |      |         |            |            |     |
+    |                    & Loops                   | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined| BRAM |   DSP   |     FF     |     LUT    | URAM|
+    +----------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+------+---------+------------+------------+-----+
+    |+ computePointHLS                             |     -|  0.00|    25271|  2.527e+05|         -|    25272|     -|        no|     -|  55 (2%)|  13225 (1%)|  14992 (2%)|    -|
+    | o VITIS_LOOP_49_2                            |     -|  7.30|    25200|  2.520e+05|       280|        -|    90|        no|     -|        -|           -|           -|    -|
+    |  + computePointHLS_Pipeline_VITIS_LOOP_51_3  |     -|  0.00|       84|    840.000|         -|       84|     -|        no|     -|  53 (2%)|  7229 (~0%)|   5233 (1%)|    -|
+    |   o VITIS_LOOP_51_3                          |    II|  7.30|       82|    820.000|        11|        3|    25|       yes|     -|        -|           -|           -|    -|
+    +----------------------------------------------+------+------+---------+-----------+----------+---------+------+----------+------+---------+------------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++-------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+
+| Interface   | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   |
+|             | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |
++-------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+
+| m_axi_gmem0 | 32 -> 512  | 64            | 64      | slave  | 0        | 512       | 16           | 16           | 16          | 16          |
+| m_axi_gmem1 | 32 -> 512  | 64            | 64      | slave  | 0        | 512       | 16           | 16           | 16          | 16          |
++-------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-----------------+--------+-------+--------+----------------------------------+------------------------------------------------------------------------------------+
+| Interface     | Register        | Offset | Width | Access | Description                      | Bit Fields                                                                         |
++---------------+-----------------+--------+-------+--------+----------------------------------+------------------------------------------------------------------------------------+
+| s_axi_control | CTRL            | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 4=AP_CONTINUE 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER            | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                                           |
+| s_axi_control | IP_IER          | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                                      |
+| s_axi_control | IP_ISR          | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                                      |
+| s_axi_control | dataIn_1        | 0x10   | 32    | W      | Data signal of dataIn            |                                                                                    |
+| s_axi_control | dataIn_2        | 0x14   | 32    | W      | Data signal of dataIn            |                                                                                    |
+| s_axi_control | layerWeight_1   | 0x1c   | 32    | W      | Data signal of layerWeight       |                                                                                    |
+| s_axi_control | layerWeight_2   | 0x20   | 32    | W      | Data signal of layerWeight       |                                                                                    |
+| s_axi_control | dataOut_final_1 | 0x28   | 32    | W      | Data signal of dataOut_final     |                                                                                    |
+| s_axi_control | dataOut_final_2 | 0x2c   | 32    | W      | Data signal of dataOut_final     |                                                                                    |
++---------------+-----------------+--------+-------+--------+----------------------------------+------------------------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+---------------+-----------+
+| Interface | Type          | Ports     |
++-----------+---------------+-----------+
+| ap_clk    | clock         | ap_clk    |
+| ap_rst_n  | reset         | ap_rst_n  |
+| interrupt | interrupt     | interrupt |
+| ap_ctrl   | ap_ctrl_chain |           |
++-----------+---------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++---------------+-----------+----------+
+| Argument      | Direction | Datatype |
++---------------+-----------+----------+
+| dataIn        | inout     | float*   |
+| layerWeight   | in        | float*   |
+| dataOut_final | inout     | float*   |
++---------------+-----------+----------+
+
+* SW-to-HW Mapping
++---------------+---------------+-----------+----------+-------------------------------------------+
+| Argument      | HW Interface  | HW Type   | HW Usage | HW Info                                   |
++---------------+---------------+-----------+----------+-------------------------------------------+
+| dataIn        | m_axi_gmem0   | interface |          |                                           |
+| dataIn        | s_axi_control | register  | offset   | name=dataIn_1 offset=0x10 range=32        |
+| dataIn        | s_axi_control | register  | offset   | name=dataIn_2 offset=0x14 range=32        |
+| layerWeight   | m_axi_gmem1   | interface |          |                                           |
+| layerWeight   | s_axi_control | register  | offset   | name=layerWeight_1 offset=0x1c range=32   |
+| layerWeight   | s_axi_control | register  | offset   | name=layerWeight_2 offset=0x20 range=32   |
+| dataOut_final | m_axi_gmem0   | interface |          |                                           |
+| dataOut_final | s_axi_control | register  | offset   | name=dataOut_final_1 offset=0x28 range=32 |
+| dataOut_final | s_axi_control | register  | offset   | name=dataOut_final_2 offset=0x2c range=32 |
++---------------+---------------+-----------+----------+-------------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------------+-----------+--------+-------+------------------------------------------+
+| HW Interface | Loop            | Direction | Length | Width | Location                                 |
++--------------+-----------------+-----------+--------+-------+------------------------------------------+
+| m_axi_gmem0  | VITIS_LOOP_49_2 | read      | 4500   | 512   | ../base/src/layers/Compute_HLS.cpp:49:19 |
+| m_axi_gmem1  | VITIS_LOOP_49_2 | read      | 4500   | 512   | ../base/src/layers/Compute_HLS.cpp:49:19 |
++--------------+-----------------+-----------+--------+-------+------------------------------------------+
+
+* Inferred Bursts and Widening Missed
++--------------+-------------+-----------------+----------------------------------------------------------------------------------------------------------+------------+------------------------------------------+
+| HW Interface | Variable    | Loop            | Problem                                                                                                  | Resolution | Location                                 |
++--------------+-------------+-----------------+----------------------------------------------------------------------------------------------------------+------------+------------------------------------------+
+| m_axi_gmem0  | dataIn      | VITIS_LOOP_51_3 | Could not widen since type i512 size is greater than or equal to the max_widen_bitwidth threshold of 512 | 214-353    | ../base/src/layers/Compute_HLS.cpp:51:20 |
+| m_axi_gmem1  | layerWeight | VITIS_LOOP_51_3 | Could not widen since type i512 size is greater than or equal to the max_widen_bitwidth threshold of 512 | 214-353    | ../base/src/layers/Compute_HLS.cpp:51:20 |
++--------------+-------------+-----------------+----------------------------------------------------------------------------------------------------------+------------+------------------------------------------+
+
+    * Resolution URL: www.xilinx.com/cgi-bin/docs/rdoc?v=2022.2;t=hls+guidance;d=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++---------------------------------------------+-----+--------+------------+------+---------+---------+
+| Name                                        | DSP | Pragma | Variable   | Op   | Impl    | Latency |
++---------------------------------------------+-----+--------+------------+------+---------+---------+
+| + computePointHLS                           | 55  |        |            |      |         |         |
+|   add_ln49_fu_725_p2                        | -   |        | add_ln49   | add  | fabric  | 0       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add1       | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_1    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_2    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_3    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_4    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_5    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_6    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_7    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_8    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_9    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_s    | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_10   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_11   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_12   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_13   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_14   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_15   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_16   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_17   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_18   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_19   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_20   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_21   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_22   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_23   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_24   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_25   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_26   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_27   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_28   | fadd | fulldsp | 3       |
+|   fadd_32ns_32ns_32_4_full_dsp_1_U93        | 2   |        | add40_29   | fadd | fulldsp | 3       |
+|   add_ln65_fu_1043_p2                       | -   |        | add_ln65   | add  | fabric  | 0       |
+|   add_ln65_1_fu_1048_p2                     | -   |        | add_ln65_1 | add  | fabric  | 0       |
+|  + computePointHLS_Pipeline_VITIS_LOOP_51_3 | 53  |        |            |      |         |         |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U12        | 3   |        | mul        | fmul | maxdsp  | 2       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U13        | 3   |        | mul22_1    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U2        | 2   |        | add25_1    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U14        | 3   |        | mul22_2    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U3        | 2   |        | add25_2    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U15        | 3   |        | mul22_3    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U4        | 2   |        | add25_3    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U16        | 3   |        | mul22_4    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U5        | 2   |        | add25_4    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U17        | 3   |        | mul22_5    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U6        | 2   |        | add25_5    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U18        | 3   |        | mul22_6    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U7        | 2   |        | add25_6    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U19        | 3   |        | mul22_7    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U8        | 2   |        | add25_7    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U20        | 3   |        | mul22_8    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U9        | 2   |        | add25_8    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U21        | 3   |        | mul22_9    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U10       | 2   |        | add25_9    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U22        | 3   |        | mul22_s    | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U11       | 2   |        | add25_s    | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U12        | 3   |        | mul22_10   | fmul | maxdsp  | 2       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U13        | 3   |        | mul22_11   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U2        | 2   |        | add25_11   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U14        | 3   |        | mul22_12   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U3        | 2   |        | add25_12   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U15        | 3   |        | mul22_13   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U4        | 2   |        | add25_13   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U16        | 3   |        | mul22_14   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U5        | 2   |        | add25_14   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U17        | 3   |        | mul22_15   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U6        | 2   |        | add25_15   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U18        | 3   |        | mul22_16   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U7        | 2   |        | add25_16   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U19        | 3   |        | mul22_17   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U8        | 2   |        | add25_17   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U20        | 3   |        | mul22_18   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U9        | 2   |        | add25_18   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U21        | 3   |        | mul22_19   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U10       | 2   |        | add25_19   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U22        | 3   |        | mul22_20   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U11       | 2   |        | add25_20   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U12        | 3   |        | mul22_21   | fmul | maxdsp  | 2       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U13        | 3   |        | mul22_22   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U2        | 2   |        | add25_22   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U14        | 3   |        | mul22_23   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U3        | 2   |        | add25_23   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U15        | 3   |        | mul22_24   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U4        | 2   |        | add25_24   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U16        | 3   |        | mul22_25   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U5        | 2   |        | add25_25   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U17        | 3   |        | mul22_26   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U6        | 2   |        | add25_26   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U18        | 3   |        | mul22_27   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U7        | 2   |        | add25_27   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U19        | 3   |        | mul22_28   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U8        | 2   |        | add25_28   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U20        | 3   |        | mul22_29   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U9        | 2   |        | add25_29   | fadd | fulldsp | 3       |
+|    fmul_32ns_32ns_32_3_max_dsp_1_U21        | 3   |        | mul22_30   | fmul | maxdsp  | 2       |
+|    fadd_32ns_32ns_32_4_full_dsp_1_U10       | 2   |        | add25_30   | fadd | fulldsp | 3       |
+|    add_ln51_fu_1600_p2                      | -   |        | add_ln51   | add  | fabric  | 0       |
++---------------------------------------------+-----+--------+------------+------+---------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
+  No bind storage info in design
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------+--------------------------------------------+-------------------------------------------------------------------------+
+| Type      | Options                                    | Location                                                                |
++-----------+--------------------------------------------+-------------------------------------------------------------------------+
+| interface | mode=m_axi port=dataIn bundle=gmem0        | ../base/src/layers/Compute_HLS.cpp:39 in computepointhls, dataIn        |
+| interface | mode=m_axi port=layerWeight bundle=gmem1   | ../base/src/layers/Compute_HLS.cpp:40 in computepointhls, layerWeight   |
+| interface | mode=m_axi port=dataOut_final bundle=gmem0 | ../base/src/layers/Compute_HLS.cpp:41 in computepointhls, dataOut_final |
+| pipeline  |                                            | ../base/src/layers/Compute_HLS.cpp:52 in computepointhls                |
+| unroll    |                                            | ../base/src/layers/Compute_HLS.cpp:60 in computepointhls                |
++-----------+--------------------------------------------+-------------------------------------------------------------------------+
+
+

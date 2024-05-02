@@ -1,0 +1,35 @@
+{"sourceFile": [{
+      "name": "",
+      "directive": [
+        {
+          "functionName": "computePointHLS",
+          "label": "",
+          "functionLabel": "",
+          "id": "1",
+          "sourceFile": "\/home\/Jake\/Desktop\/cpre563\/hls\/hls\/solution1\/directives.tcl",
+          "sourceLine": "6",
+          "pragma": {
+            "name": "TOP",
+            "option": [{
+                "name": "name",
+                "value": "computePointHLS"
+              }]
+          }
+        },
+        {
+          "functionName": "computePointHLS",
+          "label": "",
+          "functionLabel": "",
+          "id": "2",
+          "sourceFile": "\/home\/Jake\/Desktop\/cpre563\/hls\/hls\/solution1\/csynth.tcl",
+          "sourceLine": "17",
+          "pragma": {
+            "name": "TOP",
+            "option": [{
+                "name": "name",
+                "value": "computePointHLS"
+              }]
+          }
+        }
+      ]
+    }]}

@@ -1,0 +1,26 @@
+21:41:44 **** Build of configuration Emulation-SW for project sample_kernels ****
+make -j64 all 
+/mnt/xilinx-dev-env/Vitis/2022.2/bin/v++ --target sw_emu --compile -I"../src" --config adder-compile.cfg -o"build/adder.xo" "../src/adder.cpp"
+Option Map File Used: '/mnt/xilinx-dev-env/Vitis/2022.2/data/vitis/vpp/optMap.xml'
+
+****** v++ v2022.2 (64-bit)
+  **** SW Build 3671529 on 2022-10-13-17:52:11
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+INFO: [v++ 60-1306] Additional information associated with this v++ compile can be found at:
+	Reports: /home/Jake/Desktop/cpre563/workspace/sample_kernels/Emulation-SW/build/reports/adder
+	Log files: /home/Jake/Desktop/cpre563/workspace/sample_kernels/Emulation-SW/build/logs/adder
+Running Dispatch Server on port: 43305
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/Jake/Desktop/cpre563/workspace/sample_kernels/Emulation-SW/build/adder.xo.compile_summary, at Wed Mar 27 21:41:56 2024
+INFO: [v++ 60-1315] Creating rulecheck session with output '/home/Jake/Desktop/cpre563/workspace/sample_kernels/Emulation-SW/build/reports/adder/adder_guidance.html', at Wed Mar 27 21:41:56 2024
+INFO: [v++ 60-895]   Target platform: /opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/xilinx_u2_gen3x4_xdma_gc_2_202110_1.xpfm
+INFO: [v++ 60-1578]   This platform contains Xilinx Shell Archive '/opt/xilinx/platforms/xilinx_u2_gen3x4_xdma_gc_2_202110_1/hw/hw.xsa'
+INFO: [v++ 74-78] Compiler Version string: 2022.2
+INFO: [v++ 60-585] Compiling for software emulation target
+INFO: [v++ 60-423]   Target device: xilinx_u2_gen3x4_xdma_gc_2_202110_1
+INFO: [v++ 60-242] Creating kernel: 'adder'
+make: *** [makefile:58: build/adder.xo] Terminated
+Command canceled
+
+21:42:02 Build Cancelled (took 17s.448ms)
+

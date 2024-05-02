@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move &apos;layers&apos; to &apos;src&apos;" description="Move &apos;layers&apos; to &apos;src&apos;" destination="src" element1="/smartssd/src/layers" flags="7" id="org.eclipse.ltk.core.refactoring.move.resources" resources="1" stamp="1710981721313" updateReferences="true"/>
+</session>

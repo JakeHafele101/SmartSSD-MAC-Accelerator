@@ -1,0 +1,33 @@
+<xilinx:hls_fe_msgs>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/Jake/Desktop/cpre563/hls/hls/solution1/csynth.tcl:17:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaContext="directive" ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaOptions="name=computePointHLS" ARG_PragmaType="top" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="/home/Jake/Desktop/cpre563/hls/hls/solution1/directives.tcl:6:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaContext="directive" ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaOptions="name=computePointHLS" ARG_PragmaType="top" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="../base/src/layers/Compute_HLS.cpp:39:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaOptions="mode=m_axi port=dataIn bundle=gmem0" ARG_PragmaType="interface" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="../base/src/layers/Compute_HLS.cpp:40:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaOptions="mode=m_axi port=layerWeight bundle=gmem1" ARG_PragmaType="interface" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="../base/src/layers/Compute_HLS.cpp:41:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaOptions="mode=m_axi port=dataOut_final bundle=gmem0" ARG_PragmaType="interface" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="../base/src/layers/Compute_HLS.cpp:52:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaType="pipeline" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_VERBOSE_DUMP" msg_id="207-5471" msg_severity="WARNING" msg_loc="../base/src/layers/Compute_HLS.cpp:60:9" msg_body="HLS pragma dump">
+        <args ARG_PragmaFunction="computePointHLS" ARG_PragmaIsValid="1" ARG_PragmaType="unroll" ClangWarningOption="dump-hls-pragmas"/>
+    </msg>
+    <msg msg_groups="PRAGMA_UNROLL" msg_id="214-291" msg_severity="INFO" msg_loc="../base/src/layers/Compute_HLS.cpp:54:19" msg_body="Loop 'VITIS_LOOP_54_4' is marked as complete unroll implied by the pipeline pragma">
+        <args LoopName="VITIS_LOOP_54_4"/>
+    </msg>
+    <msg msg_groups="PRAGMA_UNROLL" msg_id="214-186" msg_severity="INFO" msg_loc="../base/src/layers/Compute_HLS.cpp:38:0" msg_body="Unrolling loop 'VITIS_LOOP_54_4' (../base/src/layers/Compute_HLS.cpp:54:19) in function 'computePointHLS' completely with a factor of 32">
+        <args Factor="32" LoopLoc="../base/src/layers/Compute_HLS.cpp:54:19" LoopName="VITIS_LOOP_54_4"/>
+    </msg>
+    <msg msg_groups="PRAGMA_UNROLL" msg_id="214-186" msg_severity="INFO" msg_loc="../base/src/layers/Compute_HLS.cpp:38:0" msg_body="Unrolling loop 'VITIS_LOOP_59_5' (../base/src/layers/Compute_HLS.cpp:59:20) in function 'computePointHLS' completely with a factor of 31">
+        <args Factor="31" LoopLoc="../base/src/layers/Compute_HLS.cpp:59:20" LoopName="VITIS_LOOP_59_5"/>
+    </msg>
+</xilinx:hls_fe_msgs>
+
